@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slack.slackjarservice.schedulemant.dao.PomodoroRecordDao">
+
+    <resultMap type="com.slack.slackjarservice.schedulemant.entity.PomodoroRecord" id="PomodoroRecordMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="taskId" column="task_id" jdbcType="BIGINT"/>
+        <result property="timeBlockId" column="time_block_id" jdbcType="BIGINT"/>
+        <result property="plannedMinutes" column="planned_minutes" jdbcType="INTEGER"/>
+        <result property="actualMinutes" column="actual_minutes" jdbcType="INTEGER"/>
+        <result property="startTime" column="start_time" jdbcType="BIGINT"/>
+        <result property="endTime" column="end_time" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="interruptReason" column="interrupt_reason" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="BIGINT"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+    </resultMap>
+
+</mapper>
