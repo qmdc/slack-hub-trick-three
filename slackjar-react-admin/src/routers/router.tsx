@@ -10,6 +10,7 @@ import welcome from "./modules/welcome";
 import system from "./modules/system";
 import front from "./front/front";
 import other from "./modules/other";
+import towerDefense from "./modules/towerdefense";
 
 
 /**
@@ -31,9 +32,10 @@ export declare type MenuRouteObject = {
  * 这些路由会被包裹在 CheckLogin 组件中，未登录会跳转到登录页
  */
 const portalRouters: MenuRouteObject[] = [
-    {...welcome},   // 首页/欢迎页
-    {...system},    // 系统设置模块
-    {...other},     // 其他模块
+    {...welcome},        // 首页/欢迎页
+    {...towerDefense},   // 塔防游戏模块
+    {...system},         // 系统设置模块
+    {...other},          // 其他模块
 ]
 
 /**
