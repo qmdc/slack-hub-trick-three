@@ -265,22 +265,24 @@ const TowerDefenseGame = forwardRef<TowerDefenseGameRef, GameCanvasProps>(({
         }
 
         // 绘制起点和终点
-        pathData.forEach((point, index) => {
-            const px = point.x * tileSize + tileSize / 2;
-            const py = point.y * tileSize + tileSize / 2;
+        if (pathData.length > 0) {
+            pathData.forEach((point, index) => {
+                const px = point.x * tileSize + tileSize / 2;
+                const py = point.y * tileSize + tileSize / 2;
 
-            if (index === 0) {
-                ctx.fillStyle = '#44ff44';
-                ctx.beginPath();
-                ctx.arc(px, py, tileSize / 3, 0, Math.PI * 2);
-                ctx.fill();
-            } else if (index === pathData.length - 1) {
-                ctx.fillStyle = '#ff4444';
-                ctx.beginPath();
-                ctx.arc(px, py, tileSize / 3, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        });
+                if (index === 0) {
+                    ctx.fillStyle = '#44ff44';
+                    ctx.beginPath();
+                    ctx.arc(px, py, tileSize / 3, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (index === pathData.length - 1) {
+                    ctx.fillStyle = '#ff4444';
+                    ctx.beginPath();
+                    ctx.arc(px, py, tileSize / 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+        }
 
         // 绘制悬停格子
         if (hoverCell && selectedTowerType) {
@@ -389,115 +391,156 @@ const TowerDefenseGame = forwardRef<TowerDefenseGameRef, GameCanvasProps>(({
             const deltaTime = timestamp - lastTimeRef.current;
             lastTimeRef.current = timestamp;
 
-            if (isPlaying) {
-                setEnemies(prev => {
-                    return prev.map(enemy => {
-                        if (!enemy.isAlive) return enemy;
+            try {
+                if (isPlaying && pathData.length > 0) {
+                    setEnemies(prev => {
+                        return prev.map(enemy => {
+                            if (!enemy.isAlive) return enemy;
 
-                        const speed = enemy.baseSpeed * enemy.speedMultiplier * enemy.slowEffect * (deltaTime / 1000);
-                        let newPathIndex = enemy.pathIndex + speed;
+                            const speed = enemy.baseSpeed * enemy.speedMultiplier * enemy.slowEffect * (deltaTime / 1000);
+                            let newPathIndex = enemy.pathIndex + speed;
 
-                        if (newPathIndex >= pathData.length) {
-                            return {...enemy, pathIndex: pathData.length - 1, isAlive: false};
-                        }
+                            if (newPathIndex >= pathData.length) {
+                                return {...enemy, pathIndex: pathData.length - 1, isAlive: false};
+                            }
 
-                        const pathIndex = Math.floor(newPathIndex);
-                        const pathProgress = newPathIndex - pathIndex;
+                            if (newPathIndex < 0) {
+                                const startPoint = pathData[0];
+                                return {
+                                    ...enemy,
+                                    positionX: startPoint.x,
+                                    positionY: startPoint.y,
+                                    pathIndex: newPathIndex,
+                                };
+                            }
 
-                        if (pathIndex >= pathData.length - 1) {
-                            const lastPoint = pathData[pathData.length - 1];
+                            const pathIndex = Math.floor(newPathIndex);
+                            const pathProgress = newPathIndex - pathIndex;
+
+                            if (pathIndex >= pathData.length - 1) {
+                                const lastPoint = pathData[pathData.length - 1];
+                                return {
+                                    ...enemy,
+                                    positionX: lastPoint.x,
+                                    positionY: lastPoint.y,
+                                    pathIndex: newPathIndex,
+                                };
+                            }
+
+                            if (pathIndex < 0 || pathIndex >= pathData.length) {
+                                return enemy;
+                            }
+
+                            const currentPoint = pathData[pathIndex];
+                            const nextPoint = pathData[Math.min(pathIndex + 1, pathData.length - 1)];
+
+                            if (!currentPoint || !nextPoint) {
+                                return enemy;
+                            }
+
                             return {
                                 ...enemy,
-                                positionX: lastPoint.x,
-                                positionY: lastPoint.y,
+                                positionX: currentPoint.x + (nextPoint.x - currentPoint.x) * pathProgress,
+                                positionY: currentPoint.y + (nextPoint.y - currentPoint.y) * pathProgress,
                                 pathIndex: newPathIndex,
                             };
-                        }
-
-                        const currentPoint = pathData[pathIndex];
-                        const nextPoint = pathData[Math.min(pathIndex + 1, pathData.length - 1)];
-
-                        return {
-                            ...enemy,
-                            positionX: currentPoint.x + (nextPoint.x - currentPoint.x) * pathProgress,
-                            positionY: currentPoint.y + (nextPoint.y - currentPoint.y) * pathProgress,
-                            pathIndex: newPathIndex,
-                        };
-                    });
-                });
-
-                setProjectiles(prev => {
-                    return prev.filter(proj => {
-                        const dx = proj.targetX - proj.x;
-                        const dy = proj.targetY - proj.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < proj.speed) {
-                            setEnemies(enemies => enemies.map(e => {
-                                if (e.id === proj.targetEnemyId) {
-                                    const newHp = e.currentHp - proj.damage;
-                                    if (newHp <= 0) {
-                                        return {...e, currentHp: 0, isAlive: false};
-                                    }
-                                    return {...e, currentHp: newHp};
-                                }
-                                return e;
-                            }));
-                            return false;
-                        }
-
-                        proj.x += (dx / dist) * proj.speed;
-                        proj.y += (dy / dist) * proj.speed;
-                        return true;
-                    });
-                });
-
-                setTowers(prev => {
-                    const now = Date.now();
-                    return prev.map(tower => {
-                        const attackInterval = 1000 / tower.attackSpeed;
-                        if (now - tower.lastAttackTime < attackInterval) {
-                            return tower;
-                        }
-
-                        const centerX = tower.gridX * tileSize + tileSize / 2;
-                        const centerY = tower.gridY * tileSize + tileSize / 2;
-
-                        const targetEnemy = enemies.find(e => {
-                            if (!e.isAlive) return false;
-                            const ex = e.positionX * tileSize + tileSize / 2;
-                            const ey = e.positionY * tileSize + tileSize / 2;
-                            const dx = ex - centerX;
-                            const dy = ey - centerY;
-                            return Math.sqrt(dx * dx + dy * dy) <= tower.rangePixels;
                         });
-
-                        if (targetEnemy) {
-                            const ex = targetEnemy.positionX * tileSize + tileSize / 2;
-                            const ey = targetEnemy.positionY * tileSize + tileSize / 2;
-
-                            setProjectiles(p => [...p, {
-                                id: `proj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                                x: centerX,
-                                y: centerY,
-                                targetX: ex,
-                                targetY: ey,
-                                color: tower.color,
-                                damage: tower.damage,
-                                speed: 15,
-                                towerId: tower.id,
-                                targetEnemyId: targetEnemy.id,
-                            }]);
-
-                            return {...tower, lastAttackTime: now};
-                        }
-
-                        return tower;
                     });
-                });
+
+                    setProjectiles(prev => {
+                        return prev.filter(proj => {
+                            try {
+                                const dx = proj.targetX - proj.x;
+                                const dy = proj.targetY - proj.y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                                if (dist < proj.speed) {
+                                    setEnemies(enemies => enemies.map(e => {
+                                        if (e.id === proj.targetEnemyId) {
+                                            const newHp = e.currentHp - proj.damage;
+                                            if (newHp <= 0) {
+                                                return {...e, currentHp: 0, isAlive: false};
+                                            }
+                                            return {...e, currentHp: newHp};
+                                        }
+                                        return e;
+                                    }));
+                                    return false;
+                                }
+
+                                proj.x += (dx / dist) * proj.speed;
+                                proj.y += (dy / dist) * proj.speed;
+                                return true;
+                            } catch (e) {
+                                console.error('Projectile update error:', e);
+                                return false;
+                            }
+                        });
+                    });
+
+                    setTowers(prev => {
+                        const now = Date.now();
+                        return prev.map(tower => {
+                            try {
+                                const attackInterval = 1000 / tower.attackSpeed;
+                                if (now - tower.lastAttackTime < attackInterval) {
+                                    return tower;
+                                }
+
+                                const centerX = tower.gridX * tileSize + tileSize / 2;
+                                const centerY = tower.gridY * tileSize + tileSize / 2;
+
+                                const targetEnemy = enemies.find(e => {
+                                    if (!e.isAlive) return false;
+                                    try {
+                                        const ex = e.positionX * tileSize + tileSize / 2;
+                                        const ey = e.positionY * tileSize + tileSize / 2;
+                                        const dx = ex - centerX;
+                                        const dy = ey - centerY;
+                                        return Math.sqrt(dx * dx + dy * dy) <= tower.rangePixels;
+                                    } catch (e) {
+                                        return false;
+                                    }
+                                });
+
+                                if (targetEnemy) {
+                                    const ex = targetEnemy.positionX * tileSize + tileSize / 2;
+                                    const ey = targetEnemy.positionY * tileSize + tileSize / 2;
+
+                                    setProjectiles(p => [...p, {
+                                        id: `proj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                                        x: centerX,
+                                        y: centerY,
+                                        targetX: ex,
+                                        targetY: ey,
+                                        color: tower.color,
+                                        damage: tower.damage,
+                                        speed: 15,
+                                        towerId: tower.id,
+                                        targetEnemyId: targetEnemy.id,
+                                    }]);
+
+                                    return {...tower, lastAttackTime: now};
+                                }
+
+                                return tower;
+                            } catch (e) {
+                                console.error('Tower attack error:', e);
+                                return tower;
+                            }
+                        });
+                    });
+                }
+            } catch (e) {
+                console.error('Game loop error:', e);
             }
 
-            draw();
+            try {
+                draw();
+            } catch (e) {
+                console.error('Draw error:', e);
+            }
+
             gameLoopRef.current = requestAnimationFrame(gameLoop);
         };
 

@@ -110,6 +110,7 @@ const MapEditor: React.FC = () => {
     const [editingWave, setEditingWave] = useState<TdWave | null>(null);
     const [waveForm] = Form.useForm();
     const [waveEnemies, setWaveEnemies] = useState<{enemyId: number; count: number}[]>([]);
+    const [showWaveForm, setShowWaveForm] = useState(false);
 
     // 加载数据
     useEffect(() => {
@@ -481,6 +482,7 @@ const MapEditor: React.FC = () => {
 
     const handleAddWave = () => {
         setEditingWave(null);
+        setShowWaveForm(true);
         waveForm.resetFields();
         waveForm.setFieldsValue({
             waveNumber: waves.length + 1,
@@ -494,6 +496,7 @@ const MapEditor: React.FC = () => {
 
     const handleEditWave = (wave: TdWave) => {
         setEditingWave(wave);
+        setShowWaveForm(true);
         waveForm.setFieldsValue(wave);
         setWaveEnemies([]);
     };
@@ -519,6 +522,7 @@ const MapEditor: React.FC = () => {
                 message.success('保存成功');
                 setEditingWave(null);
                 setWaveEnemies([]);
+                setShowWaveForm(false);
                 const wavesRes = await getWavesByMapId(selectedMapForWaves!.id);
                 if (wavesRes.data) {
                     setWaves(wavesRes.data);
@@ -1296,6 +1300,7 @@ const MapEditor: React.FC = () => {
                     setSelectedMapForWaves(null);
                     setEditingWave(null);
                     setWaveEnemies([]);
+                    setShowWaveForm(false);
                 }}
                 footer={null}
                 width={800}
@@ -1317,7 +1322,7 @@ const MapEditor: React.FC = () => {
                     pagination={false}
                 />
 
-                {(editingWave || waveForm.getFieldsValue().waveNumber) && (
+                {showWaveForm && (
                     <Card title={editingWave ? '编辑波次' : '新建波次'} style={{marginTop: 16}}>
                         <Form form={waveForm} layout="vertical">
                             <Row gutter={16}>

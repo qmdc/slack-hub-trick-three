@@ -85,7 +85,6 @@ public class TdTowerServiceImpl extends ServiceImpl<TdTowerDao, TdTower> impleme
     @Override
     public List<TdTower> getAvailableTowers(Integer currentWave) {
         LambdaQueryWrapper<TdTower> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TdTower::getStatus, EnableStatusEnum.ENABLE.getCode());
 
         if (Objects.nonNull(currentWave)) {
             queryWrapper.and(w -> w.isNull(TdTower::getUnlockWave)

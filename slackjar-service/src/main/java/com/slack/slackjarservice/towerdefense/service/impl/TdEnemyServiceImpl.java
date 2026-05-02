@@ -85,7 +85,6 @@ public class TdEnemyServiceImpl extends ServiceImpl<TdEnemyDao, TdEnemy> impleme
     @Override
     public List<TdEnemy> getAvailableEnemies() {
         return this.list(new LambdaQueryWrapper<TdEnemy>()
-                .eq(TdEnemy::getStatus, EnableStatusEnum.ENABLE.getCode())
                 .orderByDesc(TdEnemy::getCreateTime));
     }
 }
