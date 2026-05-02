@@ -71,7 +71,7 @@ const PomodoroTimer: React.FC = () => {
     const [selectedTimeBlock, setSelectedTimeBlock] = useState<ScheduleTimeBlock | null>(null)
     const [loading, setLoading] = useState(false)
 
-    const timerRef = useRef<NodeJS.Timeout | null>(null)
+    const timerRef = useRef<number | null>(null)
     const startTimeRef = useRef<number>(0)
 
     const loadCurrentPomodoro = useCallback(async () => {

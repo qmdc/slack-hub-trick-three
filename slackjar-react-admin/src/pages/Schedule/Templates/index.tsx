@@ -488,12 +488,13 @@ const Templates: React.FC = () => {
                         <div className={styles['time-blocks-list']}>
                             {timeBlocks.map((block, index) => {
                                 const typeConfig = TimeBlockTypeLabels[block.blockType] || TimeBlockTypeLabels[TimeBlockTypeEnum.OTHER]
+                                const blockId = block.id || ''
                                 return (
-                                    <div key={block.id} className={styles['time-block-row']}>
+                                    <div key={blockId} className={styles['time-block-row']}>
                                         {activeTab === 'weekly' && (
                                             <Select
                                                 value={block.dayOfWeek}
-                                                onChange={(value) => updateTimeBlock(block.id, 'dayOfWeek', value)}
+                                                onChange={(value) => updateTimeBlock(blockId, 'dayOfWeek', value)}
                                                 className={styles['day-select']}
                                             >
                                                 {WEEKDAYS.map((day, i) => (
@@ -506,7 +507,7 @@ const Templates: React.FC = () => {
                                         <TimePicker
                                             value={dayjs(block.startTime, 'HH:mm')}
                                             format="HH:mm"
-                                            onChange={(time) => time && updateTimeBlock(block.id, 'startTime', time.format('HH:mm'))}
+                                            onChange={(time) => updateTimeBlock(blockId, 'startTime', time?.format('HH:mm') || '')}
                                             className={styles['time-picker']}
                                             placeholder="开始"
                                         />
@@ -514,13 +515,13 @@ const Templates: React.FC = () => {
                                         <TimePicker
                                             value={dayjs(block.endTime, 'HH:mm')}
                                             format="HH:mm"
-                                            onChange={(time) => time && updateTimeBlock(block.id, 'endTime', time.format('HH:mm'))}
+                                            onChange={(time) => updateTimeBlock(blockId, 'endTime', time?.format('HH:mm') || '')}
                                             className={styles['time-picker']}
                                             placeholder="结束"
                                         />
                                         <Select
                                             value={block.blockType}
-                                            onChange={(value) => updateTimeBlock(block.id, 'blockType', value)}
+                                            onChange={(value) => updateTimeBlock(blockId, 'blockType', value)}
                                             className={styles['type-select']}
                                         >
                                             {Object.entries(TimeBlockTypeLabels).map(([key, value]) => (
@@ -531,7 +532,7 @@ const Templates: React.FC = () => {
                                         </Select>
                                         <Input
                                             value={block.title}
-                                            onChange={(e) => updateTimeBlock(block.id, 'title', e.target.value)}
+                                            onChange={(e) => updateTimeBlock(blockId, 'title', e.target.value)}
                                             placeholder="时间块名称"
                                             className={styles['title-input']}
                                         />
@@ -539,7 +540,7 @@ const Templates: React.FC = () => {
                                             type="text"
                                             danger
                                             icon={<DeleteOutlined/>}
-                                            onClick={() => removeTimeBlock(block.id)}
+                                            onClick={() => removeTimeBlock(blockId)}
                                             disabled={timeBlocks.length <= 1}
                                         />
                                     </div>
