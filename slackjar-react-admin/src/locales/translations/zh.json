@@ -29,6 +29,13 @@
     "pomodoro timer": "番茄钟",
     "task list": "任务列表",
     "templates": "计划模板",
-    "statistics": "统计分析"
+    "statistics": "统计分析",
+    "smart home": "智能家居",
+    "device management": "设备管理",
+    "scene editor": "场景编辑器",
+    "schedule task": "定时任务",
+    "linkage rule": "联动规则",
+    "energy analysis": "能耗分析",
+    "alert management": "告警管理"
   }
 }

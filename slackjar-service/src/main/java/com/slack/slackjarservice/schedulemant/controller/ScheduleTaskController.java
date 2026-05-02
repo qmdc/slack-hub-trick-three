@@ -18,11 +18,11 @@ import java.util.List;
  *
  * @author zhn
  */
-@RestController
+@RestController("scheduleMantTaskController")
 @RequestMapping("/schedule/task")
 public class ScheduleTaskController extends BaseController {
 
-    @Resource
+    @Resource(name = "scheduleTaskService")
     private ScheduleTaskService scheduleTaskService;
 
     /**
