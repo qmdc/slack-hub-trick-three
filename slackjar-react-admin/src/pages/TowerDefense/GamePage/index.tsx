@@ -50,8 +50,8 @@ import {
     type PathPoint,
     type GameInitResponse,
     type TowerPlacement,
-} from '../../apis/modules/towerdefense';
-import TowerDefenseGame from '../../components/TowerDefenseGame';
+} from '../../../apis/modules/towerdefense';
+import TowerDefenseGame from '../../../components/TowerDefenseGame';
 import './GamePage.module.scss';
 import type {ColumnsType} from 'antd/es/table';
 

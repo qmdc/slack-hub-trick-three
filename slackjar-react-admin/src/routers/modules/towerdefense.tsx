@@ -2,18 +2,15 @@ import {
     PlaySquareOutlined,
     SettingOutlined,
     TrophyOutlined,
-    FileTextOutlined,
 } from "@ant-design/icons";
 import {MenuRouteObject} from "../router";
 import lazyLoad from "../lazyLoad";
 import React, {lazy} from "react";
-import {Navigate} from "react-router";
 
 const towerDefense: MenuRouteObject = {
     path: "tower-defense",
     label: "menu.tower defense",
     icon: <PlaySquareOutlined/>,
-    element: <Navigate to="game" replace/>,
     children: [
         {
             path: "game",

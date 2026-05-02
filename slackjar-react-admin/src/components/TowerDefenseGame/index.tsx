@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useCallback, useState} from 'react';
+import React, {useRef, useEffect, useCallback, useState, forwardRef, useImperativeHandle} from 'react';
 import type {TowerInfo, EnemyState, TowerState, PathPoint, TowerPlacement} from '../../apis/modules/towerdefense';
 import './TowerDefenseGame.module.scss';
 
@@ -27,7 +27,7 @@ const COLORS = {
 // ============================================
 // 类型定义
 // ============================================
-interface TowerInstance {
+export interface TowerInstance {
     id: string;
     towerId: number;
     towerType: number;
@@ -43,7 +43,7 @@ interface TowerInstance {
     isSelected?: boolean;
 }
 
-interface EnemyInstance {
+export interface EnemyInstance {
     id: string;
     enemyId: number;
     enemyType: number;
@@ -74,7 +74,7 @@ interface Projectile {
     targetEnemyId: string;
 }
 
-interface GameCanvasProps {
+export interface GameCanvasProps {
     mapWidth: number;
     mapHeight: number;
     tileSize: number;
@@ -90,10 +90,18 @@ interface GameCanvasProps {
     isPlaying: boolean;
 }
 
+export interface TowerDefenseGameRef {
+    addEnemies: (enemies: EnemyInstance[]) => void;
+    getTowers: () => TowerInstance[];
+    updateTower: (towerId: string, updates: Partial<TowerInstance>) => void;
+    removeTower: (towerId: string) => void;
+    getKilledEnemies: () => EnemyInstance[];
+}
+
 // ============================================
 // 组件实现
 // ============================================
-const TowerDefenseGame: React.FC<GameCanvasProps> = ({
+const TowerDefenseGame = forwardRef<TowerDefenseGameRef, GameCanvasProps>(({
     mapWidth,
     mapHeight,
     tileSize,
@@ -107,7 +115,7 @@ const TowerDefenseGame: React.FC<GameCanvasProps> = ({
     selectedTowerType,
     gameSessionId,
     isPlaying,
-}) => {
+}, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [grid, setGrid] = useState<number[]>([]);
     const [towers, setTowers] = useState<TowerInstance[]>([]);
@@ -527,7 +535,7 @@ const TowerDefenseGame: React.FC<GameCanvasProps> = ({
         return killed;
     }, [enemies]);
 
-    React.useImperativeHandle(React.createRef(), () => ({
+    useImperativeHandle(ref, () => ({
         addEnemies,
         getTowers,
         updateTower,
@@ -546,6 +554,8 @@ const TowerDefenseGame: React.FC<GameCanvasProps> = ({
             style={{cursor: selectedTowerType ? 'crosshair' : 'default'}}
         />
     );
-};
+});
+
+TowerDefenseGame.displayName = 'TowerDefenseGame';
 
 export default TowerDefenseGame;
