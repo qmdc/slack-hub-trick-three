@@ -14,7 +14,7 @@ server:
     context-path: /slack
 
 mybatis-plus:
-  mapper-locations: classpath:mybatis/**/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
   type-aliases-package: com.slack.slackjarservice.**.entity
   configuration:
     map-underscore-to-camel-case: true
