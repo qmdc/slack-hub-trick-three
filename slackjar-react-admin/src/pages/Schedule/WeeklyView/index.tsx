@@ -64,13 +64,14 @@ const MINUTES_PER_HOUR = 60
 const WeeklyView: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const blocksRef = useRef<TimeBlock[]>([])
     const [currentWeekStart, setCurrentWeekStart] = useState<Dayjs>(
         dayjs().startOf('week').add(1, 'day')
     )
-    const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([])
+    const [timeBlocks, setTimeBlocks] = useState<ScheduleTimeBlock[]>([])
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
-    const [editingBlock, setEditingBlock] = useState<TimeBlock | null>(null)
+    const [editingBlock, setEditingBlock] = useState<ScheduleTimeBlock | null>(null)
     const [form] = Form.useForm()
     const [dragState, setDragState] = useState<DragState | null>(null)
     const [hoveredBlock, setHoveredBlock] = useState<number | null>(null)
@@ -92,14 +93,7 @@ const WeeklyView: React.FC = () => {
             const {start, end} = getWeekRange()
             const res = await getTimeBlocksByDateRange(start, end)
             if (res.data) {
-                const blocks = res.data.map(block => ({
-                    ...block,
-                    x: 0,
-                    y: 0,
-                    width: 0,
-                    height: 0
-                }))
-                setTimeBlocks(blocks)
+                setTimeBlocks(res.data)
             }
         } catch (error) {
             message.error('加载时间块失败')
@@ -232,7 +226,7 @@ const WeeklyView: React.FC = () => {
 
         for (const block of timeBlocks) {
             const pos = calculateBlockPosition(block, startDate)
-            const calculatedBlock = {...block, ...pos}
+            const calculatedBlock: TimeBlock = {...block, ...pos}
             calculatedBlocks.push(calculatedBlock)
 
             const isHovered = hoveredBlock === block.id
@@ -273,7 +267,7 @@ const WeeklyView: React.FC = () => {
             }
         }
 
-        setTimeBlocks(calculatedBlocks)
+        blocksRef.current = calculatedBlocks
     }, [timeBlocks, hoveredBlock, dragState, getWeekRange, calculateBlockPosition])
 
     const calculateDragPreview = useCallback(() => {
@@ -339,7 +333,7 @@ const WeeklyView: React.FC = () => {
         const pos = getCanvasPosition(e)
         if (!pos) return
 
-        const clickedBlock = [...timeBlocks].reverse().find(block =>
+        const clickedBlock = [...blocksRef.current].reverse().find(block =>
             pos.x >= block.x && pos.x <= block.x + block.width &&
             pos.y >= block.y && pos.y <= block.y + block.height
         )
@@ -409,13 +403,13 @@ const WeeklyView: React.FC = () => {
                 startMinute: Math.min(59, snappedMinute)
             })
         }
-    }, [getCanvasPosition, timeBlocks, currentWeekStart])
+    }, [getCanvasPosition, currentWeekStart])
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
         const pos = getCanvasPosition(e)
         if (!pos) return
 
-        const hovered = [...timeBlocks].reverse().find(block =>
+        const hovered = [...blocksRef.current].reverse().find(block =>
             pos.x >= block.x && pos.x <= block.x + block.width &&
             pos.y >= block.y && pos.y <= block.y + block.height
         )
@@ -425,7 +419,7 @@ const WeeklyView: React.FC = () => {
         if (dragState && dragState.isDragging) {
             drawCanvas()
         }
-    }, [getCanvasPosition, timeBlocks, dragState, drawCanvas])
+    }, [getCanvasPosition, dragState, drawCanvas])
 
     const handleMouseUp = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
         if (!dragState || !dragState.isDragging) return
@@ -459,7 +453,7 @@ const WeeklyView: React.FC = () => {
             setEditingBlock(null)
             setModalVisible(true)
         } else if (dragState.type === 'move' && dragState.blockId && pos) {
-            const block = timeBlocks.find(b => b.id === dragState.blockId)
+            const block = blocksRef.current.find(b => b.id === dragState.blockId)
             if (!block) return
 
             const {startDate} = getWeekRange()
@@ -487,7 +481,7 @@ const WeeklyView: React.FC = () => {
                 message.error('移动时间块失败')
             })
         } else if (dragState.type === 'resize' && dragState.blockId && pos) {
-            const block = timeBlocks.find(b => b.id === dragState.blockId)
+            const block = blocksRef.current.find(b => b.id === dragState.blockId)
             if (!block) return
 
             const originalStartTime = dayjs(block.startTime)
@@ -512,7 +506,7 @@ const WeeklyView: React.FC = () => {
         }
 
         setDragState(null)
-    }, [dragState, getCanvasPosition, getWeekRange, form, timeBlocks, loadTimeBlocks])
+    }, [dragState, getCanvasPosition, getWeekRange, form, loadTimeBlocks])
 
     const handleMouseLeave = useCallback(() => {
         setHoveredBlock(null)
