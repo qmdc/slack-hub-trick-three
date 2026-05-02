@@ -1,0 +1,240 @@
+.tower-defense-game {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+    .map-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .map-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      .wave-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #aaa;
+      }
+    }
+
+    .game-stats {
+      display: flex;
+      gap: 24px;
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stat-label {
+          font-size: 12px;
+          color: #888;
+        }
+
+        .stat-value {
+          font-size: 20px;
+          font-weight: bold;
+
+          &.gold {
+            color: #ffd700;
+          }
+
+          &.hp {
+            color: #ff4444;
+          }
+
+          &.wave {
+            color: #44aaff;
+          }
+        }
+      }
+    }
+
+    .game-controls {
+      display: flex;
+      gap: 12px;
+    }
+  }
+
+  .game-content {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+
+    .canvas-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #1a1a2e;
+      border-radius: 8px;
+      padding: 16px;
+      overflow: auto;
+
+      canvas {
+        border: 2px solid #3a3a4a;
+        border-radius: 4px;
+      }
+    }
+
+    .sidebar {
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .sidebar-section {
+        background: #1a1a2e;
+        border-radius: 8px;
+        padding: 16px;
+
+        .section-title {
+          font-size: 16px;
+          font-weight: bold;
+          color: #fff;
+          margin-bottom: 12px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid #3a3a4a;
+        }
+
+        .tower-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .tower-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.05);
+            }
+
+            &.selected {
+              background: rgba(68, 158, 255, 0.2);
+              border-color: #449eff;
+            }
+
+            &.disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+
+            .tower-icon {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 18px;
+            }
+
+            .tower-info {
+              flex: 1;
+
+              .tower-name {
+                font-weight: bold;
+                color: #fff;
+              }
+
+              .tower-cost {
+                font-size: 12px;
+                color: #ffd700;
+              }
+            }
+          }
+        }
+
+        .selected-tower-info {
+          .tower-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+
+            .tower-icon {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 24px;
+            }
+
+            .tower-info {
+              .tower-name {
+                font-size: 18px;
+                font-weight: bold;
+                color: #fff;
+              }
+
+              .tower-level {
+                font-size: 14px;
+                color: #44aaff;
+              }
+            }
+          }
+
+          .tower-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+
+            .stat {
+              background: rgba(255, 255, 255, 0.05);
+              padding: 8px;
+              border-radius: 4px;
+              text-align: center;
+
+              .stat-label {
+                font-size: 12px;
+                color: #888;
+              }
+
+              .stat-value {
+                font-size: 16px;
+                font-weight: bold;
+                color: #fff;
+              }
+            }
+          }
+
+          .tower-actions {
+            display: flex;
+            gap: 8px;
+          }
+        }
+
+        .layout-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+    }
+  }
+}

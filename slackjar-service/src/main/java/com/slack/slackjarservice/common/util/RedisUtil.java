@@ -541,4 +541,20 @@ public class RedisUtil {
             return 0;
         }
     }
+
+    // ============================ Scan操作 ============================
+
+    /**
+     * 模糊查询key
+     * @param pattern 匹配模式，如 "td:tower:instance:*"
+     * @return 匹配的key集合
+     */
+    public Set<String> scan(String pattern) {
+        try {
+            return redisTemplate.keys(pattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptySet();
+        }
+    }
 }
