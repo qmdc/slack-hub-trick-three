@@ -123,8 +123,14 @@ public class PomodoroRecordServiceImpl extends ServiceImpl<PomodoroRecordDao, Po
         LambdaQueryWrapper<PomodoroRecord> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PomodoroRecord::getUserId, userId)
                 .ge(PomodoroRecord::getStartTime, startTime)
-                .le(PomodoroRecord::getEndTime, endTime)
                 .orderByAsc(PomodoroRecord::getStartTime);
+        
+        if (endTime != null) {
+            queryWrapper.and(wrapper -> wrapper
+                    .le(PomodoroRecord::getEndTime, endTime)
+                    .or()
+                    .isNull(PomodoroRecord::getEndTime));
+        }
 
         return this.list(queryWrapper);
     }
@@ -207,8 +213,14 @@ public class PomodoroRecordServiceImpl extends ServiceImpl<PomodoroRecordDao, Po
         LambdaQueryWrapper<PomodoroRecord> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PomodoroRecord::getUserId, userId)
                 .ge(PomodoroRecord::getStartTime, startTime)
-                .le(PomodoroRecord::getEndTime, endTime)
                 .orderByAsc(PomodoroRecord::getStartTime);
+        
+        if (endTime != null) {
+            queryWrapper.and(wrapper -> wrapper
+                    .le(PomodoroRecord::getEndTime, endTime)
+                    .or()
+                    .isNull(PomodoroRecord::getEndTime));
+        }
 
         List<PomodoroRecord> records = this.list(queryWrapper);
 
@@ -271,8 +283,14 @@ public class PomodoroRecordServiceImpl extends ServiceImpl<PomodoroRecordDao, Po
 
         LambdaQueryWrapper<PomodoroRecord> recordQueryWrapper = new LambdaQueryWrapper<>();
         recordQueryWrapper.eq(PomodoroRecord::getUserId, userId)
-                .ge(PomodoroRecord::getStartTime, startTime)
-                .le(PomodoroRecord::getEndTime, endTime);
+                .ge(PomodoroRecord::getStartTime, startTime);
+        
+        if (endTime != null) {
+            recordQueryWrapper.and(wrapper -> wrapper
+                    .le(PomodoroRecord::getEndTime, endTime)
+                    .or()
+                    .isNull(PomodoroRecord::getEndTime));
+        }
 
         List<PomodoroRecord> records = this.list(recordQueryWrapper);
 
