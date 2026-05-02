@@ -83,7 +83,6 @@ public class TdMapServiceImpl extends ServiceImpl<TdMapDao, TdMap> implements Td
     @Override
     public List<TdMap> getAvailableMaps() {
         return this.list(new LambdaQueryWrapper<TdMap>()
-                .eq(TdMap::getStatus, EnableStatusEnum.ENABLE.getCode())
                 .orderByDesc(TdMap::getCreateTime));
     }
 }

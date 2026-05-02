@@ -13,6 +13,7 @@ import {
     Col,
     Spin,
     Tooltip,
+    Typography,
 } from 'antd';
 import {
     PlayCircleOutlined,
@@ -27,6 +28,7 @@ import {
     GoldOutlined,
     HeartOutlined,
     RocketOutlined,
+    SettingOutlined,
 } from '@ant-design/icons';
 import {useNavigate} from 'react-router';
 import {
@@ -54,6 +56,8 @@ import {
 import TowerDefenseGame from '../../../components/TowerDefenseGame';
 import './GamePage.module.scss';
 import type {ColumnsType} from 'antd/es/table';
+
+const {Title} = Typography;
 
 // ============================================
 // 类型定义
@@ -303,6 +307,11 @@ const GamePage: React.FC = () => {
     const handleStartWave = async () => {
         if (!gameState) return;
 
+        if (!gameState.pathData || gameState.pathData.length === 0) {
+            message.error('地图路径未配置，请在关卡编辑器中配置地图路径');
+            return;
+        }
+
         const nextWave = gameState.currentWave + 1;
 
         try {
@@ -312,6 +321,11 @@ const GamePage: React.FC = () => {
             });
 
             if (res.data?.success) {
+                const newPathData = gameState.pathData;
+                const startX = newPathData.length > 0 ? newPathData[0].x : 0;
+                const startY = newPathData.length > 0 ? newPathData[0].y : 0;
+                const pathLength = newPathData.length > 0 ? newPathData.length : 1;
+
                 setGameState(prev => {
                     if (!prev) return null;
                     return {
@@ -328,9 +342,9 @@ const GamePage: React.FC = () => {
                         enemyType: 1,
                         currentHp: spawn.maxHp,
                         maxHp: spawn.maxHp,
-                        positionX: gameState!.pathData[0].x,
-                        positionY: gameState!.pathData[0].y,
-                        pathIndex: 0 - index * (gameState!.pathData.length / res.data!.spawnOrder.length),
+                        positionX: startX,
+                        positionY: startY,
+                        pathIndex: 0 - index * (pathLength / res.data!.spawnOrder.length),
                         baseSpeed: spawn.baseSpeed,
                         speedMultiplier: 1,
                         slowEffect: 1,
@@ -348,8 +362,9 @@ const GamePage: React.FC = () => {
             } else {
                 message.error(res.data?.message || '开始波次失败');
             }
-        } catch (error) {
-            message.error('开始波次失败');
+        } catch (error: any) {
+            console.error('Start wave error:', error);
+            message.error('开始波次失败: ' + (error?.message || '未知错误'));
         }
     };
 
@@ -534,32 +549,48 @@ const GamePage: React.FC = () => {
                 <div className="map-selector">
                     <Card title="选择地图" className="map-card">
                         <Spin spinning={loading}>
-                            <Row gutter={[16, 16]}>
-                                {maps.map(map => (
-                                    <Col xs={24} sm={12} md={8} key={map.id}>
-                                        <Card
-                                            hoverable
-                                            className="map-item"
-                                            onClick={() => {
-                                                setSelectedMap(map);
-                                            }}
-                                            style={{
-                                                borderColor: selectedMap?.id === map.id ? '#449eff' : '#333',
-                                                background: selectedMap?.id === map.id ? 'rgba(68, 158, 255, 0.1)' : '#1a1a2e',
-                                            }}
-                                        >
-                                            <div className="map-item-content">
-                                                <div className="map-name">{map.name}</div>
-                                                <div className="map-desc">{map.description}</div>
-                                                <div className="map-stats">
-                                                    <span>尺寸: {map.mapWidth} x {map.mapHeight}</span>
-                                                    <span>波数: {map.totalWaves}</span>
+                            {maps.length > 0 ? (
+                                <Row gutter={[16, 16]}>
+                                    {maps.map(map => (
+                                        <Col xs={24} sm={12} md={8} key={map.id}>
+                                            <Card
+                                                hoverable
+                                                className="map-item"
+                                                onClick={() => {
+                                                    setSelectedMap(map);
+                                                }}
+                                                style={{
+                                                    borderColor: selectedMap?.id === map.id ? '#449eff' : '#333',
+                                                    background: selectedMap?.id === map.id ? 'rgba(68, 158, 255, 0.1)' : '#1a1a2e',
+                                                }}
+                                            >
+                                                <div className="map-item-content">
+                                                    <div className="map-name">{map.name}</div>
+                                                    <div className="map-desc">{map.description}</div>
+                                                    <div className="map-stats">
+                                                        <span>尺寸: {map.mapWidth} x {map.mapHeight}</span>
+                                                        <span>波数: {map.totalWaves}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Card>
-                                    </Col>
-                                ))}
-                            </Row>
+                                            </Card>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            ) : (
+                                <div style={{textAlign: 'center', padding: '48px 0'}}>
+                                    <Title level={4} style={{color: '#999'}}>暂无地图数据</Title>
+                                    <p style={{color: '#666', marginBottom: 24}}>
+                                        请先在"关卡编辑器"中添加地图，或执行数据库初始化SQL
+                                    </p>
+                                    <Button
+                                        type="primary"
+                                        icon={<SettingOutlined/>}
+                                        onClick={() => navigate('/tower-defense/editor')}
+                                    >
+                                        前往关卡编辑器
+                                    </Button>
+                                </div>
+                            )}
 
                             <div className="map-actions">
                                 <Button

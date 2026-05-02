@@ -122,7 +122,6 @@ public class TdWaveServiceImpl extends ServiceImpl<TdWaveDao, TdWave> implements
     public List<TdWave> getWavesByMapId(Long mapId) {
         return this.list(new LambdaQueryWrapper<TdWave>()
                 .eq(TdWave::getMapId, mapId)
-                .eq(TdWave::getStatus, EnableStatusEnum.ENABLE.getCode())
                 .orderByAsc(TdWave::getWaveNumber));
     }
 }
