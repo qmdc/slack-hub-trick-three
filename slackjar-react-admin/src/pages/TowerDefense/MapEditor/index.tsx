@@ -44,7 +44,7 @@ import {
     type TdTower,
     type TdEnemy,
     type TdWave,
-} from '../../apis/modules/towerdefense';
+} from '../../../apis/modules/towerdefense';
 import './MapEditor.module.scss';
 import type {ColumnsType} from 'antd/es/table';
 
