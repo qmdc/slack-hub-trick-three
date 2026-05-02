@@ -7,8 +7,12 @@ import {
     SettingOutlined,
 } from "@ant-design/icons";
 import {MenuRouteObject} from "../router";
-import lazyLoad from "../lazyLoad";
-import React, {lazy} from "react";
+import DeviceManagement from "../../pages/SmartHome/DeviceManagement";
+import SceneEditor from "../../pages/SmartHome/SceneEditor";
+import ScheduleTask from "../../pages/SmartHome/ScheduleTask";
+import LinkageRule from "../../pages/SmartHome/LinkageRule";
+import EnergyAnalysis from "../../pages/SmartHome/EnergyAnalysis";
+import AlertManagement from "../../pages/SmartHome/AlertManagement";
 
 const smartHome: MenuRouteObject = {
     path: "smart-home",
@@ -19,37 +23,37 @@ const smartHome: MenuRouteObject = {
             path: "device",
             label: "menu.device management",
             icon: <BulbOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/DeviceManagement"))),
+            element: <DeviceManagement />,
         },
         {
             path: "scene",
             label: "menu.scene editor",
             icon: <HomeOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/SceneEditor"))),
+            element: <SceneEditor />,
         },
         {
             path: "schedule",
             label: "menu.schedule task",
             icon: <ClockCircleOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/ScheduleTask"))),
+            element: <ScheduleTask />,
         },
         {
             path: "linkage",
             label: "menu.linkage rule",
             icon: <ApiOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/LinkageRule"))),
+            element: <LinkageRule />,
         },
         {
             path: "energy",
             label: "menu.energy analysis",
             icon: <WarningOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/EnergyAnalysis"))),
+            element: <EnergyAnalysis />,
         },
         {
             path: "alert",
             label: "menu.alert management",
             icon: <SettingOutlined/>,
-            element: lazyLoad(lazy(() => import("../../pages/SmartHome/AlertManagement"))),
+            element: <AlertManagement />,
         },
     ] as MenuRouteObject[],
 };

@@ -39,13 +39,27 @@ const DeviceManagement: React.FC = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
+        console.log('DeviceManagement component mounted');
         loadDevices();
     }, []);
+
+    useEffect(() => {
+        if (visible) {
+            form.resetFields();
+        }
+    }, [visible]);
+
+    const handleAdd = () => {
+        console.log('handleAdd called');
+        setEditingDevice(null);
+        setVisible(true);
+    };
 
     const loadDevices = async () => {
         setLoading(true);
         try {
             const res = await listDevices();
+            console.log('DeviceManagement component loaded devices', res);
             if (res.code === 200) {
                 setDevices(res.data || []);
             }
@@ -54,12 +68,6 @@ const DeviceManagement: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleAdd = () => {
-        setEditingDevice(null);
-        form.resetFields();
-        setVisible(true);
     };
 
     const handleEdit = (device: IotDevice) => {
@@ -173,7 +181,7 @@ const DeviceManagement: React.FC = () => {
 
             <Modal
                 title={editingDevice ? '编辑设备' : '添加设备'}
-                visible={visible}
+                open={visible}
                 onCancel={() => setVisible(false)}
                 onOk={handleSave}
             >
