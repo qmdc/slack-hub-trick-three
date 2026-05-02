@@ -19,6 +19,23 @@
     "page 404": "404 Page",
     "other": "Other",
     "personal center": "Personal Center",
-    "logged out": "Logout"
+    "logged out": "Logout",
+    "tower defense": "Tower Defense",
+    "game play": "Game Play",
+    "level editor": "Level Editor",
+    "leaderboard": "Leaderboard",
+    "schedule management": "Schedule",
+    "weekly view": "Weekly View",
+    "pomodoro timer": "Pomodoro",
+    "task list": "Task List",
+    "templates": "Templates",
+    "statistics": "Statistics",
+    "smart home": "Smart Home",
+    "device management": "Devices",
+    "scene editor": "Scene Editor",
+    "schedule task": "Schedule Task",
+    "linkage rule": "Linkage Rule",
+    "energy analysis": "Energy Analysis",
+    "alert management": "Alerts"
   }
 }

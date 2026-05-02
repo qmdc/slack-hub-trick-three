@@ -12,6 +12,7 @@ import front from "./front/front";
 import other from "./modules/other";
 import towerDefense from "./modules/towerdefense";
 import schedule from "./modules/schedule";
+import smartHome from "./modules/smarthome";
 
 
 /**
@@ -34,6 +35,7 @@ export declare type MenuRouteObject = {
  */
 const portalRouters: MenuRouteObject[] = [
     {...welcome},        // 首页/欢迎页
+    {...smartHome},      // 智能家居模块
     {...towerDefense},   // 塔防游戏模块
     {...schedule},       // 日程管理模块
     {...system},         // 系统设置模块

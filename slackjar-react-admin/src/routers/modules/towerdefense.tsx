@@ -11,6 +11,7 @@ const towerDefense: MenuRouteObject = {
     path: "tower-defense",
     label: "menu.tower defense",
     icon: <PlaySquareOutlined/>,
+    hidden: true,
     children: [
         {
             path: "game",

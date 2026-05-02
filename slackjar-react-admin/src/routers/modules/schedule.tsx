@@ -13,6 +13,7 @@ const schedule: MenuRouteObject = {
     path: "schedule",
     label: "menu.schedule management",
     icon: <CalendarOutlined/>,
+    hidden: true,
     children: [
         {
             path: "weekly-view",
