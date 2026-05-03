@@ -36,6 +36,13 @@
     "schedule task": "Schedule Task",
     "linkage rule": "Linkage Rule",
     "energy analysis": "Energy Analysis",
-    "alert management": "Alerts"
+    "alert management": "Alerts",
+    "polls": "Polls",
+    "poll list": "Poll List",
+    "create poll": "Create Poll",
+    "edit poll": "Edit Poll",
+    "poll detail": "Poll Detail",
+    "poll statistics": "Statistics",
+    "poll share": "Share Poll"
   }
 }

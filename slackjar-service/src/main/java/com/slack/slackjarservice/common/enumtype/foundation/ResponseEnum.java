@@ -29,6 +29,7 @@ public enum ResponseEnum {
      */
     DATA_INVALID(600, "error.data_invalid"),
     NOT_FOUND_ERROR(601, "error.not_found"),
+    DATA_NOT_FOUND(601, "数据不存在"),
     ERROR_GENERAL(602, "error.error"),
     ERROR_NET(603, "error.network"),
     OPTIMISTIC_LOCK(604, "error.optimistic_lock"),
@@ -127,6 +128,13 @@ public enum ResponseEnum {
     DICT_CODE_REPEAT(1401, "字典编码已存在"),
     DICT_CODE_ITEM_REPEAT(1402, "字典项编码不能重复"),
     DICT_CODE_NOT_EXIST(1403, "字典不存在"),
+
+    /**
+     * 投票问卷相关(1500-1599)
+     */
+    POLL_CLOSED(1500, "投票已关闭"),
+    POLL_EXPIRED(1501, "投票已过期"),
+    POLL_ALREADY_VOTED(1502, "您已参与过此投票"),
 
     /**
      * 其他(9000-9999)

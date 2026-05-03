@@ -13,6 +13,7 @@ import other from "./modules/other";
 import towerDefense from "./modules/towerdefense";
 import schedule from "./modules/schedule";
 import smartHome from "./modules/smarthome";
+import polls from "./modules/polls";
 
 
 /**
@@ -38,6 +39,7 @@ const portalRouters: MenuRouteObject[] = [
     {...smartHome},      // 智能家居模块
     {...towerDefense},   // 塔防游戏模块
     {...schedule},       // 日程管理模块
+    {...polls},          // 投票问卷模块
     {...system},         // 系统设置模块
     {...other},          // 其他模块
 ]

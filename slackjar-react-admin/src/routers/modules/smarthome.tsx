@@ -18,6 +18,7 @@ const smartHome: MenuRouteObject = {
     path: "smart-home",
     label: "menu.smart home",
     icon: <HomeOutlined/>,
+    hidden: true,
     children: [
         {
             path: "device",
