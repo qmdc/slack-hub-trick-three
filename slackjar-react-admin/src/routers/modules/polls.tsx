@@ -41,15 +41,7 @@ const polls: MenuRouteObject = {
             icon: <BarChartOutlined />,
             hidden: true,
             element: lazyLoad(lazy(() => import("../../pages/Polls/PollStatistics")))
-        },
-        {
-            path: "share/:shareCode",
-            label: "menu.poll share",
-            icon: <FileTextOutlined />,
-            hidden: true,
-            element: lazyLoad(lazy(() => import("../../pages/Polls/PollShare")))
-        }
-    ] as MenuRouteObject[]
+        }    ] as MenuRouteObject[]
 };
 
 export default polls;
