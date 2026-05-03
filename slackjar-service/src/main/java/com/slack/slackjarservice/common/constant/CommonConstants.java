@@ -14,7 +14,9 @@ public interface CommonConstants {
             "/sys-user/login/user-name",
             "/sys-user/login/encrypted",
             "/third-party/hitokoto",
-            "/ai/chat/stream"
+            "/ai/chat/stream",
+            "/polls/share/**",
+            "/polls/vote"
     };
 
     /**

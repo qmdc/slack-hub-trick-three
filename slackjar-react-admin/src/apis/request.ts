@@ -50,19 +50,28 @@ request.interceptors.response.use(
             setTimeout(() => {
                 window.location.href = '/login'
             }, 800)
-            return;
+            return Promise.reject(new Error('登录已失效'));
         } else if (customData.code === 400) {
-            message.error('参数错误').then()
+            message.error(customData.message || '参数错误').then()
+            return Promise.reject(new Error(customData.message || '参数错误'));
         } else if (customData.code === 403) {
-            message.error('暂无操作权限').then()
+            message.error(customData.message || '暂无操作权限').then()
+            return Promise.reject(new Error(customData.message || '暂无操作权限'));
         } else if (customData.code === 404) {
-            message.error('资源不存在').then()
+            message.error(customData.message || '资源不存在').then()
+            return Promise.reject(new Error(customData.message || '资源不存在'));
         } else if (customData.code === 429) {
             message.warning('系统繁忙，请稍后再试').then()
+            return Promise.reject(new Error('系统繁忙'));
         } else if (customData.code === 500) {
-            message.error('服务端异常').then()
+            message.error(customData.message || '服务端异常').then()
+            return Promise.reject(new Error(customData.message || '服务端异常'));
         } else if (customData.code === 503) {
             message.warning('服务暂不可用，请稍后再试').then()
+            return Promise.reject(new Error('服务暂不可用'));
+        } else if (customData.code !== 200) {
+            message.error(customData.message || '请求失败').then()
+            return Promise.reject(new Error(customData.message || '请求失败'));
         }
         return customData;
     },
