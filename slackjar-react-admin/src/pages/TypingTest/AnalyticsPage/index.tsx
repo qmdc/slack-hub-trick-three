@@ -19,17 +19,18 @@ function LineChart({ data }: { data: ChartData }) {
  const chartHeight = height - padding.top - padding.bottom;
 
  const wpmPoints = data.wpmData.map((value, index) => ({
- x: padding.left + (index / (data.wpmData.length - 1)) * chartWidth,
+ x: data.wpmData.length > 1 ? padding.left + (index / (data.wpmData.length - 1)) * chartWidth : padding.left + chartWidth / 2,
  y: padding.top + chartHeight - (value / maxWpm) * chartHeight,
  }));
 
  const accuracyPoints = data.accuracyData.map((value, index) => ({
- x: padding.left + (index / (data.accuracyData.length - 1)) * chartWidth,
+ x: data.accuracyData.length > 1 ? padding.left + (index / (data.accuracyData.length - 1)) * chartWidth : padding.left + chartWidth / 2,
  y: padding.top + chartHeight - (value / maxAccuracy) * chartHeight,
  }));
 
  const pathD = (points: { x: number; y: number }[]) => {
  if (points.length === 0) return '';
+ if (points.length === 1) return '';
  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
  };
 
@@ -42,7 +43,7 @@ function LineChart({ data }: { data: ChartData }) {
  }));
 
  const xLabels = data.labels.map((label, index) => ({
- x: padding.left + (index / (data.labels.length - 1)) * chartWidth,
+ x: data.labels.length > 1 ? padding.left + (index / (data.labels.length - 1)) * chartWidth : padding.left + chartWidth / 2,
  label,
  }));
 
