@@ -43,6 +43,9 @@
     "edit poll": "编辑投票",
     "poll detail": "投票详情",
     "poll statistics": "统计分析",
-    "poll share": "分享投票"
+    "poll share": "分享投票",
+    "typing test": "打字测试",
+    "history": "历史记录",
+    "analytics": "数据分析"
   }
 }

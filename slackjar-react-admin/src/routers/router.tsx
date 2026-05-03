@@ -14,6 +14,7 @@ import towerDefense from "./modules/towerdefense";
 import schedule from "./modules/schedule";
 import smartHome from "./modules/smarthome";
 import polls from "./modules/polls";
+import typingtest from "./modules/typingtest";
 
 
 /**
@@ -40,6 +41,7 @@ const portalRouters: MenuRouteObject[] = [
     {...towerDefense},   // 塔防游戏模块
     {...schedule},       // 日程管理模块
     {...polls},          // 投票问卷模块
+    {...typingtest},     // 打字测试模块
     {...system},         // 系统设置模块
     {...other},          // 其他模块
 ]
