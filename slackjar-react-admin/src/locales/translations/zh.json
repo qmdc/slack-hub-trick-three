@@ -36,6 +36,13 @@
     "schedule task": "定时任务",
     "linkage rule": "联动规则",
     "energy analysis": "能耗分析",
-    "alert management": "告警管理"
+    "alert management": "告警管理",
+    "polls": "投票问卷",
+    "poll list": "投票列表",
+    "create poll": "创建投票",
+    "edit poll": "编辑投票",
+    "poll detail": "投票详情",
+    "poll statistics": "统计分析",
+    "poll share": "分享投票"
   }
 }
