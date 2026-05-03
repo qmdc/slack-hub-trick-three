@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slack.slackjarservice.polls.dao.PollSurveyDao">
+
+    <select id="selectByShareCode" parameterType="string" resultType="com.slack.slackjarservice.polls.entity.PollSurvey">
+        SELECT * FROM poll_survey WHERE share_code = #{shareCode} AND deleted = 0
+    </select>
+
+    <select id="selectByCreatedBy" parameterType="long" resultType="com.slack.slackjarservice.polls.entity.PollSurvey">
+        SELECT * FROM poll_survey WHERE created_by = #{createdBy} AND deleted = 0 ORDER BY create_time DESC
+    </select>
+
+</mapper>

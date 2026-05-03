@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slack.slackjarservice.polls.dao.PollOptionDao">
+
+    <select id="selectByQuestionId" parameterType="long" resultType="com.slack.slackjarservice.polls.entity.PollOption">
+        SELECT * FROM poll_option WHERE question_id = #{questionId} AND deleted = 0 ORDER BY sort_order ASC
+    </select>
+
+    <delete id="deleteByQuestionId" parameterType="long">
+        UPDATE poll_option SET deleted = 1 WHERE question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteBySurveyId" parameterType="long">
+        UPDATE poll_option SET deleted = 1 WHERE question_id IN (SELECT id FROM poll_question WHERE survey_id = #{surveyId})
+    </delete>
+
+</mapper>
